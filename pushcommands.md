@@ -2,11 +2,18 @@
 description: Push slash command changes to GitHub and sync all command files to Notion
 ---
 
+## Step 0: Parse arguments
+
+Check `$ARGUMENTS` for `:all`. If present, set **sync_all = true**, otherwise **sync_all = false**.
+
 ## Step 1: Check for changes
 
 Run: `git -C ~/.claude/commands status --short`
 
-If the output is empty (nothing staged or unstaged), report "Nothing to commit." and skip to Step 3.
+If the output is empty (nothing staged or unstaged):
+- Report "Nothing to commit."
+- If **sync_all = false**: report "Notion already up to date. Use `:all` to force-sync all pages." Stop.
+- If **sync_all = true**: skip Step 2, go to Step 3 using all `.md` files as the sync list.
 
 ## Step 2: Commit and push to GitHub
 
@@ -19,12 +26,18 @@ git -C ~/.claude/commands push
 
 Report the files committed and the push result.
 
-## Step 3: Sync all .md files to Notion
+Then run: `git -C ~/.claude/commands show --name-only --format="" HEAD`
+
+This lists the `.md` files in the commit. Use these as the **sync list** (the files to sync to Notion).
+
+If **sync_all = true**, override the sync list with all `.md` files in `~/.claude/commands/`.
+
+## Step 3: Sync changed .md files to Notion
 
 Fetch the Notion parent page to discover existing subpages and their IDs:
 `notion-fetch` id = "https://www.notion.so/31fcdf456c418052b4dfe75bfb9290eb"
 
-For each `.md` file in `~/.claude/commands/`:
+For each `.md` file in the **sync list**:
 
 1. Read the file
 2. Strip the YAML frontmatter block (everything between the opening and closing `---`)
