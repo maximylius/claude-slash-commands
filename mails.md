@@ -24,12 +24,12 @@ Then immediately branch based on whether the user included a task.
 
 ### A1 — Read cache + start server (in parallel, same message)
 
-**Account cache** (`C:\Users\econometrics\.claude\data\mails_accounts.json`):
+**Account cache** (`~\.claude\data\mails_accounts.json`):
 - If exists: read with the built-in Read tool. Use `accounts` + `lastChecked`. Skip `discoverOnly`.
 - If missing: call `thunderbird-email:run_fetch_emails` with `discoverOnly: true`, then write result to cache via `mcp__Desktop_Commander__write_file`.
 
 **Server start** (same parallel batch):
-- command: `pythonw.exe C:\Users\econometrics\.claude\skills\chrome-artifact\serve.py`
+- command: `pythonw.exe "$env:USERPROFILE\.claude\skills\chrome-artifact\serve.py"`
 - timeout_ms: `200`
 - Silently exits if port already in use — always safe to call.
 
@@ -43,7 +43,7 @@ Determine default params:
 - **defaultCheckedFolders**: INBOX and Sent
 
 Write `mails_config.js` via `mcp__Desktop_Commander__write_file`:
-- path: `C:\Users\econometrics\.claude\skills\chrome-artifact\mails_config.js`
+- path: `~\.claude\skills\chrome-artifact\mails_config.js`
 - content: `window.EMAIL_CONFIG = <JSON.stringify(config)>;`
 
 Config shape:
@@ -77,7 +77,7 @@ The user wants results immediately. The artifact setup is secondary.
 
 ### B1 — Read cache
 
-Read `C:\Users\econometrics\.claude\data\mails_accounts.json` to get the account list.
+Read `~\.claude\data\mails_accounts.json` to get the account list.
 - If missing: call `thunderbird-email:run_fetch_emails` with `discoverOnly: true` and write the cache.
 
 ### B2 — Determine search params and search
@@ -99,7 +99,7 @@ Once results are presented, issue both in the same message:
 
 ## When the user asks to search
 
-1. Read `C:\Users\econometrics\.claude\skills\chrome-artifact\mails_state.json` using `mcp__Desktop_Commander__start_process` with command `Get-Content "C:\Users\econometrics\.claude\skills\chrome-artifact\mails_state.json" -Raw` (timeout_ms: 5000). Parse the JSON from the output.
+1. Read `C:\Users\econometrics\.claude\skills\chrome-artifact\mails_state.json` using `mcp__Desktop_Commander__start_process` with command `Get-Content "$env:USERPROFILE\.claude\skills\chrome-artifact\mails_state.json" -Raw` (timeout_ms: 5000). Parse the JSON from the output.
 2. Build fetch parameters from the state object:
    - `accountFolders`: object mapping each account (where `state.accounts[name] === true`) to the list of its folders where `state.folders[name][folder] === true`. Only include checked accounts and folders.
    - `dateFrom`: `state.startDate`
@@ -117,6 +117,6 @@ Once results are presented, issue both in the same message:
 
 1. Read `mails_state.json` using `Get-Content` (see "When the user asks to search") to get the current state and check `state.open`.
 2. Build a pending object with only the changed fields (e.g. `{"startDate":"2026-03-01","endDate":"2026-03-05"}`).
-3. **If `state.open` is `true`**: merge `_pending: <pending object>` into the current state and write the whole thing back to `C:\Users\econometrics\.claude\skills\chrome-artifact\mails_state.json` via `mcp__Desktop_Commander__write_file`. The artifact will pick it up within ~3 seconds and merge it into its displayed state.
+3. **If `state.open` is `true`**: merge `_pending: <pending object>` into the current state and write the whole thing back to `~\.claude\skills\chrome-artifact\mails_state.json` via `mcp__Desktop_Commander__write_file`. The artifact will pick it up within ~3 seconds and merge it into its displayed state.
 4. **If `state.open` is `false`** (or file missing): rewrite `mails_config.js` with the updated values and a new `_version`, so the next open shows the correct defaults.
 5. Confirm to the user what was updated.

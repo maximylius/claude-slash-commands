@@ -4,7 +4,7 @@ description: Push slash command changes to GitHub and sync all command files to 
 
 ## Step 1: Check for changes
 
-Run: `git -C C:/Users/econometrics/.claude/commands status --short`
+Run: `git -C ~/.claude/commands status --short`
 
 If the output is empty (nothing staged or unstaged), report "Nothing to commit." and skip to Step 3.
 
@@ -12,9 +12,9 @@ If the output is empty (nothing staged or unstaged), report "Nothing to commit."
 
 Run the following in sequence:
 ```
-git -C C:/Users/econometrics/.claude/commands add *.md
-git -C C:/Users/econometrics/.claude/commands commit -m "Update slash commands"
-git -C C:/Users/econometrics/.claude/commands push
+git -C ~/.claude/commands add *.md
+git -C ~/.claude/commands commit -m "Update slash commands"
+git -C ~/.claude/commands push
 ```
 
 Report the files committed and the push result.
@@ -24,7 +24,7 @@ Report the files committed and the push result.
 Fetch the Notion parent page to discover existing subpages and their IDs:
 `notion-fetch` id = "https://www.notion.so/31fcdf456c418052b4dfe75bfb9290eb"
 
-For each `.md` file in `C:/Users/econometrics/.claude/commands/`:
+For each `.md` file in `~/.claude/commands/`:
 
 1. Read the file
 2. Strip the YAML frontmatter block (everything between the opening and closing `---`)
