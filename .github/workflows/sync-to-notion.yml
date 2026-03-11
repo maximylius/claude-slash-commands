@@ -1,0 +1,27 @@
+name: Sync to Notion
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '*.md'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install notion-client pyyaml
+
+      - name: Sync markdown files to Notion
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_PARENT_PAGE_ID: 31fcdf456c418052b4dfe75bfb9290eb
+        run: python scripts/sync_to_notion.py
