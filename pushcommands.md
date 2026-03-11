@@ -24,7 +24,7 @@ Report the files committed and the push result.
 Fetch the Notion parent page to discover existing subpages and their IDs:
 `notion-fetch` id = "https://www.notion.so/31fcdf456c418052b4dfe75bfb9290eb"
 
-For each `.md` file in `C:/Users/econometrics/.claude/commands/` **except `pushcommands.md`**:
+For each `.md` file in `C:/Users/econometrics/.claude/commands/`:
 
 1. Read the file
 2. Strip the YAML frontmatter block (everything between the opening and closing `---`)
