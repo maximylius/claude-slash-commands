@@ -46,3 +46,20 @@ For each `.md` file in the **sync list**:
 5. If no match: call `notion-create-pages` under parent page id `31fcdf456c418052b4dfe75bfb9290eb` with the filename stem as title and the body as content
 
 Report which Notion pages were updated or created.
+
+## Step 4: Stamp each synced subpage title with the current timestamp
+
+After each `notion-update-page` or `notion-create-pages` call in Step 3, immediately call:
+
+```
+notion-update-page
+  page_id = <the page just updated or created>
+  command = "update_properties"
+  properties = { "title": "<commandname> YY-MM-DD HH:MM" }
+```
+
+- Replace `<commandname>` with the filename stem (e.g. `mails`)
+- Replace `YY-MM-DD HH:MM` with the **current UTC time** at the moment of the push (e.g. `26-03-12 14:30`)
+- Example result: `mails 26-03-12 14:30`
+
+Report the new title set for each page.

@@ -99,7 +99,7 @@ Once results are presented, issue both in the same message:
 
 ## When the user asks to search
 
-1. Read `C:\Users\econometrics\.claude\skills\chrome-artifact\mails_state.json` using `mcp__Desktop_Commander__start_process` with command `Get-Content "$env:USERPROFILE\.claude\skills\chrome-artifact\mails_state.json" -Raw` (timeout_ms: 5000). Parse the JSON from the output.
+1. Read `~\.claude\skills\chrome-artifact\mails_state.json` using `mcp__Desktop_Commander__start_process` with command `Get-Content "$env:USERPROFILE\.claude\skills\chrome-artifact\mails_state.json" -Raw` (timeout_ms: 5000). Parse the JSON from the output.
 2. Build fetch parameters from the state object:
    - `accountFolders`: object mapping each account (where `state.accounts[name] === true`) to the list of its folders where `state.folders[name][folder] === true`. Only include checked accounts and folders.
    - `dateFrom`: `state.startDate`
